@@ -5,7 +5,7 @@ from telebot import types
 
 TOKEN = '7039287159:AAHGA_F7irUaMPIvlGTiQyCPX47a5NhjeOU'
 URL_BASE = 'https://animefire.plus/pesquisar/'
-WEBHOOK_URL = 'https://your-app-name.vercel.app/'  # Substitua pela sua URL pública
+WEBHOOK_URL = 'https://mybottelegram.vercel.app/'  # Substitua pela sua URL pública
 selected_anime = {}
 bot = telebot.TeleBot(TOKEN)
 
