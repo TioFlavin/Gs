@@ -2,18 +2,24 @@ import requests
 from bs4 import BeautifulSoup
 import telebot
 from telebot import types
+from flask import Flask, request
 
 TOKEN = '7039287159:AAHGA_F7irUaMPIvlGTiQyCPX47a5NhjeOU'
 URL_BASE = 'https://animefire.plus/pesquisar/'
 WEBHOOK_URL = 'https://mybottelegram.vercel.app/'  # Substitua pela sua URL pública
+
 selected_anime = {}
 bot = telebot.TeleBot(TOKEN)
 
+app = Flask(__name__)
+
 # Configuração do Webhook
-def set_webhook():
-    webhook_url = WEBHOOK_URL + TOKEN  # A URL completa para o webhook inclui o token
-    bot.remove_webhook()
-    bot.set_webhook(url=webhook_url)
+@app.route('/' + TOKEN, methods=['POST'])
+def webhook():
+    json_str = request.get_data().decode('UTF-8')
+    update = telebot.types.Update.de_json(json_str)
+    bot.process_new_updates([update])
+    return "OK", 200
 
 # Função para enviar botões de animes
 def send_anime_buttons(chat_id, anime_list, start_index, show_back_button=False, show_next_button=False, message_id=None):
@@ -140,6 +146,7 @@ def get_video_source(episode_link):
 
     return video_source
 
-# Função para iniciar o Webhook
+# Função para inicializar o bot e o webhook
 if __name__ == '__main__':
-    set_webhook()  # Configura o webhook
+    bot.remove_webhook()
+    bot.set_webhook(url=WEBHOOK_URL + TOKEN)
